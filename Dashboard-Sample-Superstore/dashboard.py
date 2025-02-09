@@ -6,9 +6,10 @@ st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="
 
 @st.cache_data
 def load_data():
-    url = "https://drive.google.com/file/d/1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l/view?usp=drive_link"  # Ganti YOUR_FILE_ID dengan ID file di Google Drive
-    df = pd.read_csv(url)
-    df["Order Date"] = pd.to_datetime(df["Order Date"], errors='coerce')
+    file_id = "YOUR_FILE_ID"  # Ganti dengan ID file Google Drive
+    url = f"https://drive.google.com/file/d/1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l/view?usp=sharing"
+    df = pd.read_csv(url, encoding="ISO-8859-1")  # Coba encoding ini jika ada error karakter
+    df["Order Date"] = pd.to_datetime(df["Order Date"], errors="coerce")  
     return df
 
 df = load_data()
@@ -28,7 +29,7 @@ filtered_df["Month"] = filtered_df["Order Date"].dt.to_period("M").astype(str)
 total_sales = filtered_df["Sales"].sum()
 total_profit = filtered_df["Profit"].sum()
 
-st.title("\ud83d\udcca Superstore Dashboard")
+st.title("📊 Superstore Dashboard")
 st.markdown("### Analisis Penjualan dan Profit")
 
 col1, col2 = st.columns(2)
@@ -54,8 +55,8 @@ sales_trend = filtered_df.groupby("Month")["Sales"].sum().reset_index()
 fig_trend = px.line(sales_trend, x="Month", y="Sales", title="Tren Penjualan Bulanan", markers=True)
 st.plotly_chart(fig_trend, use_container_width=True)
 
-st.subheader("\ud83d\udcca Data Sample")
+st.subheader("📊 Data Sample")
 st.dataframe(filtered_df.head(10))
 
 st.markdown("---")
-st.markdown("\ud83d\udccc **Dashboard ini dikembangkan oleh Kelompok 6 | Universitas Komputer Indonesia (UNIKOM)**")
+st.markdown("📌 **Dashboard ini dikembangkan oleh Kelompok 6 | Universitas Komputer Indonesia (UNIKOM)**")
