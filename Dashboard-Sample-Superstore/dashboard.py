@@ -8,7 +8,7 @@ st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="
 # Fungsi untuk memuat data dengan caching
 @st.cache_data
 def load_data():
-    df = pd.read_csv("sample-superstore.csv")
+    df = pd.read_csv("Sample-Superstore.csv")
     df["Order Date"] = pd.to_datetime(df["Order Date"], errors='coerce')
     return df.dropna()
 
