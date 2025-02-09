@@ -5,39 +5,40 @@ import os
 
 st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="📊")
 
-# Fungsi untuk memuat data dengan pengecekan file
 @st.cache_data
 def load_data():
-    file_path = "Sample-Superstore.csv"  # Sesuaikan path jika berbeda
+    # Cek apakah file CSV ada di direktori
+    file_path = "Sample-Superstore.csv"
     if not os.path.exists(file_path):
-        st.error(f"⚠️ File {file_path} tidak ditemukan! Pastikan sudah diunggah ke repository GitHub atau folder yang benar.")
-        return pd.DataFrame()  # Mengembalikan dataframe kosong jika file tidak ada
+        st.error("File Sample-Superstore.csv tidak ditemukan. Pastikan file tersedia di direktori yang benar.")
+        return pd.DataFrame()
+    
     df = pd.read_csv(file_path)
-    df["Order Date"] = pd.to_datetime(df["Order Date"], errors="coerce")
-    return df.dropna()
+    df["Order Date"] = pd.to_datetime(df["Order Date"], errors='coerce')
+    return df
 
-# Load data
 df = load_data()
 
-# Jika DataFrame kosong, hentikan eksekusi
 if df.empty:
     st.stop()
 
-# Sidebar untuk filter
-with st.sidebar:
-    st.image("images/unikom.png", width=150)
-    st.image("images/kelompok6.png", width=450)
-    st.markdown("## Filter Data")  
-    regions = df["Region"].dropna().unique()
-    selected_regions = st.multiselect("Pilih Region", regions, default=regions)
-    categories = df["Category"].dropna().unique()
-    selected_categories = st.multiselect("Pilih Kategori", categories, default=categories)
+# Sidebar dengan filter
+title_col, img_col = st.sidebar.columns([1, 1])
+with title_col:
+    st.image("images/unikom.png", width=100)
+with img_col:
+    st.image("images/kelompok6.png", width=150)
+
+st.sidebar.markdown("## Filter Data")  
+regions = df["Region"].dropna().unique()
+selected_regions = st.sidebar.multiselect("Pilih Region", regions, default=regions)
+categories = df["Category"].dropna().unique()
+selected_categories = st.sidebar.multiselect("Pilih Kategori", categories, default=categories)
 
 # Filter data
 filtered_df = df[(df["Region"].isin(selected_regions)) & (df["Category"].isin(selected_categories))]
 filtered_df["Month"] = filtered_df["Order Date"].dt.to_period("M").astype(str)
 
-# Total Penjualan & Profit
 total_sales = filtered_df["Sales"].sum()
 total_profit = filtered_df["Profit"].sum()
 
