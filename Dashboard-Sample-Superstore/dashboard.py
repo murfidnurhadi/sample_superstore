@@ -3,22 +3,26 @@ import pandas as pd
 import plotly.express as px
 import gdown
 
-st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="📊")
-
 @st.cache_data
 def load_data():
-    file_id = "1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l"  # Sesuaikan dengan ID file kamu
-    url = f"https://drive.google.com/file/d/1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l/view?usp=sharing{file_id}"
+    file_id = "1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l"  # ID file dari Google Drive
+    url = f"https://drive.google.com/uc?id={file_id}"
     output = "sample-superstore.csv"
 
     try:
         gdown.download(url, output, quiet=False)
-        df = pd.read_csv(output)
+        
+        # Coba baca CSV dengan berbagai delimiter
+        try:
+            df = pd.read_csv(output)  # Default delimiter ","
+        except pd.errors.ParserError:
+            df = pd.read_csv(output, delimiter=";")  # Coba delimiter ";"
+        
         df["Order Date"] = pd.to_datetime(df["Order Date"])
         return df
     except Exception as e:
         st.error(f"Gagal mengunduh atau membaca file CSV dari Google Drive: {e}")
-        return pd.DataFrame()  # Kembalikan DataFrame kosong jika gagal
+        return pd.DataFrame()
 
 df = load_data()
 
