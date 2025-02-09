@@ -1,35 +1,36 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import requests  # Gunakan requests sebagai alternatif
-import io
+import requests
+from io import StringIO
+from PIL import Image
 
 st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="📊")
 
 @st.cache_data
 def load_data():
-    file_id = "1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l"
+    file_id = "1g-haO4lurid7TrPmu0w-loBe6E05u7I"
     url = f"https://drive.google.com/uc?export=download&id={file_id}"
-
     response = requests.get(url)
     if response.status_code == 200:
-        df = pd.read_csv(io.StringIO(response.text), encoding="ISO-8859-1")
+        df = pd.read_csv(StringIO(response.text), encoding="ISO-8859-1")
         df["Order Date"] = pd.to_datetime(df["Order Date"], errors="coerce")
         return df
     else:
         st.error("Gagal mengunduh data dari Google Drive")
-        return pd.DataFrame()  # Mengembalikan DataFrame kosong jika gagal
+        return pd.DataFrame()
 
 df = load_data()
 
-
 with st.sidebar:
-    st.image("images/unikom.png", width=150)
-    st.image("images/kelompok6.png", width=450)
+    unikom_img = Image.open(requests.get("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/Dashboard-Sample-Superstore/images/unikom.png", stream=True).raw)
+    kelompok6_img = Image.open(requests.get("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/Dashboard-Sample-Superstore/images/kelompok6.png", stream=True).raw)
+    st.image(unikom_img, width=150)
+    st.image(kelompok6_img, width=450)
     st.markdown("## Filter Data")  
-    regions = df["Region"].dropna().unique()
+    regions = df["Region"].unique()
     selected_regions = st.multiselect("Pilih Region", regions, default=regions)
-    categories = df["Category"].dropna().unique()
+    categories = df["Category"].unique()
     selected_categories = st.multiselect("Pilih Kategori", categories, default=categories)
 
 filtered_df = df[(df["Region"].isin(selected_regions)) & (df["Category"].isin(selected_categories))]
