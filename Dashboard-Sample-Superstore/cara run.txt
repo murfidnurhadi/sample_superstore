@@ -1,0 +1,12 @@
+win+r (ketik cmd)
+cari lokasi dashboard.py
+Contoh: 
+C:\Users\Labkomp1>F:
+F:\>cd F:\Ayo Ngoding\Jupyter Notebook\UAS\Dashboard-Sample-Superstore
+F:\Ayo Ngoding\Jupyter Notebook\UAS\Dashboard-Sample-Superstore>streamlit run dashboard.py
+
+  You can now view your Streamlit app in your browser.
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.68.99:8501
+
+streamlit run dashboard.py
