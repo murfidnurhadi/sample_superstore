@@ -1,32 +1,30 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import requests
-from io import StringIO
-from PIL import Image
+import gdown
 
 st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="📊")
 
 @st.cache_data
 def load_data():
-    file_id = "1g-haO4lurid7TrPmu0w-loBe6E05u7I"
-    url = f"https://drive.google.com/uc?export=download&id={file_id}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        df = pd.read_csv(StringIO(response.text), encoding="ISO-8859-1")
-        df["Order Date"] = pd.to_datetime(df["Order Date"], errors="coerce")
+    file_id = "Ig-haO4lurid17rPm0w-loBe6E0Su7I"  # Sesuaikan dengan ID file kamu
+    url = f"https://drive.google.com/uc?id={file_id}"
+    output = "sample-superstore.csv"
+
+    try:
+        gdown.download(url, output, quiet=False)
+        df = pd.read_csv(output)
+        df["Order Date"] = pd.to_datetime(df["Order Date"])
         return df
-    else:
-        st.error("Gagal mengunduh data dari Google Drive")
-        return pd.DataFrame()
+    except Exception as e:
+        st.error(f"Gagal mengunduh atau membaca file CSV dari Google Drive: {e}")
+        return pd.DataFrame()  # Kembalikan DataFrame kosong jika gagal
 
 df = load_data()
 
 with st.sidebar:
-    unikom_img = Image.open(requests.get("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/Dashboard-Sample-Superstore/images/unikom.png", stream=True).raw)
-    kelompok6_img = Image.open(requests.get("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/Dashboard-Sample-Superstore/images/kelompok6.png", stream=True).raw)
-    st.image(unikom_img, width=150)
-    st.image(kelompok6_img, width=450)
+    st.image("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/Dashboard-Sample-Superstore/images/unikom.png", width=150)
+    st.image("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/Dashboard-Sample-Superstore/images/kelompok6.png", width=450)
     st.markdown("## Filter Data")  
     regions = df["Region"].unique()
     selected_regions = st.multiselect("Pilih Region", regions, default=regions)
