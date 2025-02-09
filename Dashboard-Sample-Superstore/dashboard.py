@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import gdown  # Tambahkan library ini
 
 st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="📊")
 
@@ -8,7 +9,13 @@ st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="
 def load_data():
     file_id = "1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l"
     url = f"https://drive.google.com/file/d/1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l/view?usp=sharing{file_id}"
-    df = pd.read_csv(url, encoding="ISO-8859-1")  # Gunakan encoding ini jika ada error karakter
+    
+    # Simpan file sementara
+    output = "superstore.csv"
+    gdown.download(url, output, quiet=False)
+
+    # Baca file CSV setelah diunduh
+    df = pd.read_csv(output, encoding="ISO-8859-1")  
     df["Order Date"] = pd.to_datetime(df["Order Date"], errors="coerce")
     return df
 
