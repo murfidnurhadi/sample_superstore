@@ -6,7 +6,7 @@ st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="
 
 @st.cache_data
 def load_data():
-    url = "https://drive.google.com/uc?id=YOUR_FILE_ID"  # Ganti YOUR_FILE_ID dengan ID file di Google Drive
+    url = "https://drive.google.com/file/d/1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l/view?usp=drive_link"  # Ganti YOUR_FILE_ID dengan ID file di Google Drive
     df = pd.read_csv(url)
     df["Order Date"] = pd.to_datetime(df["Order Date"], errors='coerce')
     return df
