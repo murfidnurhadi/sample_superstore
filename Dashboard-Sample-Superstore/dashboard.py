@@ -6,8 +6,10 @@ st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv("Sample-Superstore.csv")
-    df["Order Date"] = pd.to_datetime(df["Order Date"])
+    file_id = "1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l"
+    url = f"https://drive.google.com/file/d/1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l/view?usp=sharing"
+    df = pd.read_csv(url, encoding="ISO-8859-1")  # Gunakan encoding ini jika ada error karakter
+    df["Order Date"] = pd.to_datetime(df["Order Date"], errors="coerce")
     return df
 
 df = load_data()
@@ -16,9 +18,9 @@ with st.sidebar:
     st.image("images/unikom.png", width=150)
     st.image("images/kelompok6.png", width=450)
     st.markdown("## Filter Data")  
-    regions = df["Region"].unique()
+    regions = df["Region"].dropna().unique()
     selected_regions = st.multiselect("Pilih Region", regions, default=regions)
-    categories = df["Category"].unique()
+    categories = df["Category"].dropna().unique()
     selected_categories = st.multiselect("Pilih Kategori", categories, default=categories)
 
 filtered_df = df[(df["Region"].isin(selected_regions)) & (df["Category"].isin(selected_categories))]
