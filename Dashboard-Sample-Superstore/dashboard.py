@@ -3,6 +3,8 @@ import pandas as pd
 import plotly.express as px
 import gdown
 
+st.set_page_config(layout="wide", page_title="Superstore Dashboard", page_icon="📊")
+
 @st.cache_data
 def load_data():
     file_id = "1g-haOdl4urid7IrPmu0w-1oBe6E0Su7l"  # ID file dari Google Drive
@@ -27,8 +29,8 @@ def load_data():
 df = load_data()
 
 with st.sidebar:
-    st.image("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/Dashboard-Sample-Superstore/images/unikom.png", width=150)
-    st.image("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/Dashboard-Sample-Superstore/images/kelompok6.png", width=450)
+    st.image("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/images/unikom.png", width=150)
+    st.image("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/images/kelompok6.png", width=450)
     st.markdown("## Filter Data")  
     regions = df["Region"].unique()
     selected_regions = st.multiselect("Pilih Region", regions, default=regions)
@@ -56,6 +58,21 @@ st.plotly_chart(fig_sales, use_container_width=True)
 st.subheader("Profit vs Discount")
 fig_profit_discount = px.scatter(filtered_df, x="Discount", y="Profit", color="Category", size="Sales", title="Profit vs Discount", hover_data=["State"])
 st.plotly_chart(fig_profit_discount, use_container_width=True)
+
+st.subheader("Total Jumlah Transaksi per Kategori")
+category_counts = filtered_df["Category"].value_counts().reset_index()
+category_counts.columns = ["Category", "Total Transactions"]
+st.table(category_counts)
+
+fig_category_count = px.bar(
+    category_counts, 
+    x="Category", 
+    y="Total Transactions", 
+    title="Total Transaksi per Kategori", 
+    color="Total Transactions", 
+    color_continuous_scale="Viridis"
+)
+st.plotly_chart(fig_category_count, use_container_width=True)
 
 st.subheader("Distribusi Penjualan per Kategori Produk")
 sales_by_category = filtered_df.groupby("Category")["Sales"].sum().reset_index()
