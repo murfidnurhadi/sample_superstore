@@ -102,7 +102,9 @@ st.subheader("Tren Penjualan Bulanan per Kategori")
 if selected_trend_category == "Semua":
     sales_trend = filtered_df.groupby(["Month", "Category"])["Sales"].sum().reset_index()
     fig_trend = px.line(sales_trend, x="Month", y="Sales", color="Category", 
-                        title="Tren Penjualan Bulanan (Semua Kategori)", markers=True)
+                        title="Tren Penjualan Bulanan (Semua Kategori)", markers=True,
+                       title="Distribusi Penjualan (Semua Kategori)", markers=True,
+                       title="Profit vs Discount (Semua Kategori)", markers=True)
 else:
     sales_trend = filtered_df[filtered_df["Category"] == selected_trend_category].groupby("Month")["Sales"].sum().reset_index()
     fig_trend = px.line(sales_trend, x="Month", y="Sales", title=f"Tren Penjualan Bulanan ({selected_trend_category})", markers=True)
