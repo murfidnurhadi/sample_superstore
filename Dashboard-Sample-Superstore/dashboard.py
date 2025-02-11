@@ -32,9 +32,8 @@ df = load_data()
 
 # Sidebar untuk filter
 with st.sidebar:
-    st.image("https://github.com/murfidnurhadi/sample_superstore/blob/main/Dashboard-Sample-Superstore/images/unikom.png", width=150)
-    st.image("https://github.com/murfidnurhadi/sample_superstore/blob/main/Dashboard-Sample-Superstore/images/kelompok6.png", width=450)
-    st.markdown("## Filter Data")  
+    st.image("images/unikom.png", width=150)
+    st.image("images/kelompok6.png", width=450)
 
     # Filter Region
     regions = df["Region"].unique()
