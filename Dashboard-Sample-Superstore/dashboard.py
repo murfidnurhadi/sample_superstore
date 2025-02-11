@@ -32,7 +32,7 @@ df = load_data()
 
 # Sidebar untuk filter
 with st.sidebar:
-    st.image("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/images/unikom.png", width=150)
+    st.image("https://github.com/murfidnurhadi/sample_superstore/blob/main/Dashboard-Sample-Superstore/images/unikom.png", width=150)
     st.image("https://raw.githubusercontent.com/murfidnurhadi/sample_superstore/main/images/kelompok6.png", width=450)
     st.markdown("## Filter Data")  
 
