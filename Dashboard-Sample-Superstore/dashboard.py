@@ -46,12 +46,18 @@ with st.sidebar:
     # Filter Kategori untuk Tren Penjualan
     selected_trend_category = st.selectbox("Pilih Kategori Tren Penjualan", ["Semua"] + list(categories))
 
+    # Pilihan untuk menyimpan pertanyaan
+    pertanyaan = st.selectbox("Pilih Pertanyaan", [
+        "1. Berapa total penjualan (Total Sales) yang ditampilkan setelah filter diterapkan?",
+        "2. Bagaimana tren penjualan bulanan yang terlihat pada grafik 'Tren Penjualan'?",
+        "3. Negara bagian mana yang memiliki total penjualan tertinggi berdasarkan grafik 'Total Penjualan per Negara'?",
+        "4. Bagaimana hubungan antara diskon dan profit berdasarkan grafik 'Profit vs Discount'?",
+        "5. Kategori produk mana yang memiliki kontribusi penjualan terbesar berdasarkan grafik 'Distribusi Penjualan per Kategori'?",
+        "6. Bagaimana data sample yang ditampilkan dalam tabel?"
+    ])
+
 # Filter data berdasarkan pilihan user
 filtered_df = df[(df["Region"].isin(selected_regions)) & (df["Category"].isin(selected_categories))]
-
-# Filter data untuk Profit vs Discount dan Distribusi Penjualan per Kategori Produk
-if selected_trend_category != "Semua":
-    filtered_df = filtered_df[filtered_df["Category"] == selected_trend_category]
 
 # Hitung Total Sales & Profit
 total_sales = filtered_df["Sales"].sum()
@@ -69,15 +75,12 @@ col2.metric(label="Total Profit", value=f"${total_profit:,.2f}")
 # Grafik Penjualan per Negara (State)
 st.subheader("Total Penjualan berdasarkan Negara")
 sales_by_state = filtered_df.groupby("State")["Sales"].sum().reset_index()
-fig_sales = px.bar(sales_by_state, x="State", y="Sales", title="Total Penjualan per Negara", 
-                   color="Sales", color_continuous_scale="Blues")
+fig_sales = px.bar(sales_by_state, x="State", y="Sales", title="Total Penjualan per Negara", color="Sales", color_continuous_scale="Blues")
 st.plotly_chart(fig_sales, use_container_width=True)
 
 # Scatter Plot Profit vs Discount
 st.subheader("Profit vs Discount")
-fig_profit_discount = px.scatter(filtered_df, x="Discount", y="Profit", color="Category", 
-                                 size="Sales", title=f"Profit vs Discount ({selected_trend_category})", 
-                                 hover_data=["State"])
+fig_profit_discount = px.scatter(filtered_df, x="Discount", y="Profit", color="Category", size="Sales", title=f"Profit vs Discount ({selected_trend_category})", hover_data=["State"])
 st.plotly_chart(fig_profit_discount, use_container_width=True)
 
 # Menampilkan jumlah total transaksi per kategori
@@ -87,16 +90,13 @@ category_counts.columns = ["Category", "Total Transactions"]
 st.table(category_counts)
 
 # Visualisasi Total Transaksi per Kategori
-fig_category_count = px.bar(category_counts, x="Category", y="Total Transactions", 
-                            title="Total Transaksi per Kategori", color="Total Transactions", 
-                            color_continuous_scale="Viridis")
+fig_category_count = px.bar(category_counts, x="Category", y="Total Transactions", title="Total Transaksi per Kategori", color="Total Transactions", color_continuous_scale="Viridis")
 st.plotly_chart(fig_category_count, use_container_width=True)
 
 # Pie Chart Distribusi Penjualan per Kategori
 st.subheader("Distribusi Penjualan per Kategori Produk")
 sales_by_category = filtered_df.groupby("Category")["Sales"].sum().reset_index()
-fig_pie = px.pie(sales_by_category, values="Sales", names="Category", 
-                 title=f"Distribusi Penjualan per Kategori ({selected_trend_category})", hole=0.3)
+fig_pie = px.pie(sales_by_category, values="Sales", names="Category", title=f"Distribusi Penjualan per Kategori ({selected_trend_category})", hole=0.3)
 st.plotly_chart(fig_pie, use_container_width=True)
 
 # **Tren Penjualan Bulanan Sesuai Filter Kategori**
@@ -105,12 +105,10 @@ st.subheader("Tren Penjualan Bulanan per Kategori")
 # Jika "Semua" dipilih, tampilkan semua kategori
 if selected_trend_category == "Semua":
     sales_trend = df.groupby(["Month", "Category"])["Sales"].sum().reset_index()
-    fig_trend = px.line(sales_trend, x="Month", y="Sales", color="Category", 
-                        title="Tren Penjualan Bulanan (Semua Kategori)", markers=True)
+    fig_trend = px.line(sales_trend, x="Month", y="Sales", color="Category", title="Tren Penjualan Bulanan (Semua Kategori)", markers=True)
 else:
     sales_trend = df[df["Category"] == selected_trend_category].groupby("Month")["Sales"].sum().reset_index()
-    fig_trend = px.line(sales_trend, x="Month", y="Sales", 
-                        title=f"Tren Penjualan Bulanan ({selected_trend_category})", markers=True)
+    fig_trend = px.line(sales_trend, x="Month", y="Sales", title=f"Tren Penjualan Bulanan ({selected_trend_category})", markers=True)
 
 st.plotly_chart(fig_trend, use_container_width=True)
 
