@@ -48,7 +48,7 @@ with st.sidebar:
 
     # Pilihan untuk menyimpan pertanyaan
     pertanyaan = st.selectbox("Pertanyaan", [
-        ,
+        "",
         "1. Berapa total penjualan (Total Sales) yang ditampilkan setelah filter diterapkan?",
         "2. Bagaimana tren penjualan bulanan yang terlihat pada grafik 'Tren Penjualan'?",
         "3. Negara bagian mana yang memiliki total penjualan tertinggi berdasarkan grafik 'Total Penjualan per Negara'?",
