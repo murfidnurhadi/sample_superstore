@@ -46,16 +46,6 @@ with st.sidebar:
     # Filter Kategori untuk Tren Penjualan
     selected_trend_category = st.selectbox("Pilih Kategori Tren Penjualan", ["Semua"] + list(categories))
 
-    # Menu tambahan untuk menampilkan pertanyaan
-tanya_menu = st.sidebar.selectbox("Pilih Pertanyaan", [
-    "Total penjualan setelah filter diterapkan",
-    "Tren penjualan bulanan",
-    "Negara bagian dengan penjualan tertinggi",
-    "Hubungan antara diskon dan profit",
-    "Kategori produk dengan kontribusi terbesar",
-    "Data sample dan tren penjualan"
-])
-
 # Filter data berdasarkan pilihan user
 filtered_df = df[(df["Region"].isin(selected_regions)) & (df["Category"].isin(selected_categories))]
 
@@ -127,18 +117,6 @@ st.plotly_chart(fig_trend, use_container_width=True)
 # Tampilkan Data Sample
 st.subheader("📊 Data Sample")
 st.dataframe(filtered_df.head(10))
-
-# Tampilkan pertanyaan yang dipilih
-tanya_jawab = {
-    "Total penjualan setelah filter diterapkan": "Total penjualan tergantung pada filter yang dipilih...",
-    "Tren penjualan bulanan": "Grafik Tren Penjualan menunjukkan pola kenaikan atau penurunan...",
-    "Negara bagian dengan penjualan tertinggi": "Negara bagian dengan penjualan tertinggi adalah...",
-    "Hubungan antara diskon dan profit": "Grafik Profit vs Discount menunjukkan bahwa...",
-    "Kategori produk dengan kontribusi terbesar": "Kategori dengan kontribusi terbesar adalah...",
-    "Data sample dan tren penjualan": "Data sample menunjukkan pola penjualan berdasarkan kategori dan bulan..."
-}
-
-st.sidebar.text_area("Jawaban", tanya_jawab[tanya_menu])
 
 # Footer
 st.markdown("---")
